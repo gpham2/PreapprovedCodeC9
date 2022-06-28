@@ -1,15 +1,12 @@
-
+// Token Access
 const {
   API_TOKEN_C9TG: token,
 } = process.env;
 
-
+// returns json of orders based on queried user ID
 const getPurchases = async (req, res) => {
-
   const id = req.query.id;
-
   const store = 'c9testingground';
-
   const resultTrue2 = await fetch(
       `https://${store}.myshopify.com/admin/api/2022-01/graphql.json`,
       {
@@ -36,7 +33,7 @@ const getPurchases = async (req, res) => {
                                   currencyCode,
                                   amount
                               }
-                          }
+                          },
                           lineItems(first: 10) {
                             edges {
                               node {
@@ -51,8 +48,7 @@ const getPurchases = async (req, res) => {
                   }
                 }
               }
-            }
-            
+            }  
         `,
         headers: {
           'Content-Type': 'application/graphql',
@@ -61,11 +57,9 @@ const getPurchases = async (req, res) => {
         method: 'POST',
       },
   );
- 
-  const data = await resultTrue2.json();
-  
-  console.log("print: " + data.body);
 
+  //Can use go to http://localhost:3000/api/shopify/purchases/?id=############# to check if working
+  const data = await resultTrue2.json();
   return res
     .status(200)
     .json({ message: `Your id: ${id}`, data, status: 'success' });
